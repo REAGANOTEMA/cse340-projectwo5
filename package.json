@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "CSE 340 Web Backend Development - Account Management and Inventory System",
   "main": "app.js",
-  "type": "module",
   "scripts": {
     "start": "node app.js"
   },
