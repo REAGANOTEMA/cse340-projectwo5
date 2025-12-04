@@ -3,8 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-const accountRoutes = require('./routes/accountroute');
-const inventoryRoutes = require('./routes/inventoryroute');
+const accountRoute = require('./route/accountroute');  // lowercase "route"
+const inventoryRoute = require('./route/inventoryroute');
 
 const app = express();
 
@@ -16,14 +16,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 // Routes
-app.use('/account', accountRoutes);
-app.use('/inventory', inventoryRoutes);
+app.use('/account', accountRoute);
+app.use('/inventory', inventoryRoute);
 
 // Home
 app.get('/', (req, res) => {
   const jwt = require('jsonwebtoken');
   let user = null;
-  const token = req.cookies.jwt;
+  const token = req.cookies?.jwt;
   if (token) {
     try {
       user = jwt.verify(token, process.env.JWT_SECRET);
