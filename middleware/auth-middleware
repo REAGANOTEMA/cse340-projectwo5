@@ -1,21 +1,20 @@
-const pool = require('../db/connection'); // MySQL or Postgres connection
+const jwt = require('jsonwebtoken');
 
-async function getAccountById(account_id) {
-  const sql = 'SELECT * FROM accounts WHERE account_id = ?';
-  const [rows] = await pool.execute(sql, [account_id]);
-  return rows[0];
+function requireauth(req, res, next) {
+  const token = req.cookies?.jwt;
+  if (!token) return res.redirect('/login');
+
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).send('Invalid token');
+  }
 }
 
-async function updateAccountInfo(account_id, firstname, lastname, email) {
-  const sql = 'UPDATE accounts SET firstname = ?, lastname = ?, email = ? WHERE account_id = ?';
-  const [result] = await pool.execute(sql, [firstname, lastname, email, account_id]);
-  return result.affectedRows;
+function requireadmin(req, res, next) {
+  if (!req.user || req.user.role !== 'admin') return res.status(403).send('Admin only');
+  next();
 }
 
-async function updatePassword(account_id, hashedPassword) {
-  const sql = 'UPDATE accounts SET password = ? WHERE account_id = ?';
-  const [result] = await pool.execute(sql, [hashedPassword, account_id]);
-  return result.affectedRows;
-}
-
-module.exports = { getAccountById, updateAccountInfo, updatePassword };
+module.exports = { requireauth, requireadmin };

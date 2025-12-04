@@ -1,64 +1,50 @@
-// routes/inventoryRoutes.js
 const express = require('express');
 const router = express.Router();
-const inventoryModel = require('../models/inventoryModel');
-const { requireAdmin } = require('../middleware/authMiddleware');
+const inventorymodel = require('../models/inventorymodel');
+const { requireadmin } = require('../middleware/authmiddleware');
 
-// Manage inventory page (Admin only)
-router.get('/manage', requireAdmin, async (req, res) => {
+router.get('/manage', requireadmin, async (req, res) => {
   try {
-    const items = await inventoryModel.getAllInventory();
-    // Render a view if you have EJS templates, otherwise send JSON
-    res.render('inventory/manage', { items }); 
-    // res.json(items); // Use this line if no view template
+    const items = await inventorymodel.getAllInventory();
+    res.render('inventory/manage', { items });
   } catch (err) {
-    console.error('Error fetching inventory:', err);
+    console.error(err);
     res.status(500).send('Error fetching inventory');
   }
 });
 
-// Add a new item (Admin only)
-router.post('/add', requireAdmin, async (req, res) => {
+router.post('/add', requireadmin, async (req, res) => {
   const { name, price, stock } = req.body;
-  if (!name || price == null || stock == null) {
-    return res.status(400).send('Missing required fields: name, price, stock');
-  }
+  if (!name || price == null || stock == null) return res.status(400).send('Missing fields');
 
   try {
-    const id = await inventoryModel.addInventory({ name, price, stock });
+    const id = await inventorymodel.addInventory({ name, price, stock });
     res.send(`Item added with ID: ${id}`);
   } catch (err) {
-    console.error('Error adding item:', err);
+    console.error(err);
     res.status(500).send('Error adding item');
   }
 });
 
-// Update an item (Admin only)
-router.post('/update', requireAdmin, async (req, res) => {
+router.post('/update', requireadmin, async (req, res) => {
   const { id, name, price, stock } = req.body;
-  if (!id || !name || price == null || stock == null) {
-    return res.status(400).send('Missing required fields: id, name, price, stock');
-  }
+  if (!id || !name || price == null || stock == null) return res.status(400).send('Missing fields');
 
   try {
-    const rows = await inventoryModel.updateInventory({ id, name, price, stock });
+    const rows = await inventorymodel.updateInventory({ id, name, price, stock });
     res.send(`${rows} item(s) updated`);
   } catch (err) {
-    console.error('Error updating item:', err);
+    console.error(err);
     res.status(500).send('Error updating item');
   }
 });
 
-// Delete an item (Admin only)
-router.get('/delete/:id', requireAdmin, async (req, res) => {
-  const { id } = req.params;
-  if (!id) return res.status(400).send('Missing item ID');
-
+router.get('/delete/:id', requireadmin, async (req, res) => {
   try {
-    const rows = await inventoryModel.deleteInventory(id);
+    const rows = await inventorymodel.deleteInventory(req.params.id);
     res.send(`${rows} item(s) deleted`);
   } catch (err) {
-    console.error('Error deleting item:', err);
+    console.error(err);
     res.status(500).send('Error deleting item');
   }
 });

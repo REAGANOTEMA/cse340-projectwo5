@@ -2,8 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const accountRoutes = require('./routes/accountRoutes');
-const inventoryRoutes = require('./routes/inventoryRoutes');
+
+const accountroutes = require('./routes/accountroutes');
+const inventoryroutes = require('./routes/inventoryroutes');
 
 const app = express();
 
@@ -15,21 +16,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 // Routes
-app.use('/account', accountRoutes);
-app.use('/inventory', inventoryRoutes);
+app.use('/account', accountroutes);
+app.use('/inventory', inventoryroutes);
 
 // Home
-app.get('/', (req, res) => {
-  const jwt = require('jsonwebtoken');
-  let user = null;
-  const token = req.cookies.jwt;
-  if (token) {
-    try {
-      user = jwt.verify(token, process.env.JWT_SECRET);
-    } catch {}
-  }
-  res.render('home', { user });
-});
+app.get('/', (req, res) => res.render('home'));
 
 // Logout
 app.get('/logout', (req, res) => {
