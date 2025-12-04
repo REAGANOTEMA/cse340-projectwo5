@@ -1,11 +1,20 @@
+// routes/accountRoutes.js
 const express = require('express');
 const router = express.Router();
-const accountController = require('../controllers/accountController');
-const { requireLogin } = require('../middleware/authMiddleware');
 
-router.get('/manage', requireLogin, accountController.accountManagement);
-router.get('/update/:id', requireLogin, accountController.updateAccountView);
-router.post('/update', requireLogin, accountController.processAccountUpdate);
-router.post('/update-password', requireLogin, accountController.processPasswordUpdate);
+// Account home
+router.get('/', (req, res) => {
+  res.send('Account Management Home');
+});
+
+// Update account info
+router.post('/update', (req, res) => {
+  res.send('Account info updated!');
+});
+
+// Update password
+router.post('/update-password', (req, res) => {
+  res.send('Password updated!');
+});
 
 module.exports = router;
