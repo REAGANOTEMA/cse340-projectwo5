@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs'); // use bcryptjs for compatibility
-const accountmodel = require('../models/accountmodel');
+const bcrypt = require('bcryptjs');
+const accountmodel = require('../model/accountmodel');
 const { requireauth } = require('../middleware/authmiddleware');
 
 router.get('/', requireauth, async (req, res) => {

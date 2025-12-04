@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const inventorymodel = require('../models/inventorymodel');
+const inventorymodel = require('../model/inventorymodel');
 const { requireadmin } = require('../middleware/authmiddleware');
 
 router.get('/manage', requireadmin, async (req, res) => {

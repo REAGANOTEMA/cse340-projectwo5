@@ -1,4 +1,4 @@
-const pool = require('../db/connection'); // MySQL or Postgres connection
+const pool = require('../db/connection');
 
 async function getAccountById(account_id) {
   const sql = 'SELECT * FROM accounts WHERE account_id = ?';
