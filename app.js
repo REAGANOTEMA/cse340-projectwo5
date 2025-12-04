@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-const accountRoute = require('./route/accountroute');  // lowercase "route"
+const accountRoute = require('./route/accountroute');    // matches folder & file exactly
 const inventoryRoute = require('./route/inventoryroute');
 
 const app = express();
