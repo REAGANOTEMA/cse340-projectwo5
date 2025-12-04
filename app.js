@@ -3,8 +3,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 
-const accountRoutes = require('./routes/accountroutes');
-const inventoryRoutes = require('./routes/inventoryroutes');
+const accountRoutes = require('./routes/accountroute');
+const inventoryRoutes = require('./routes/inventoryroute');
 
 const app = express();
 
