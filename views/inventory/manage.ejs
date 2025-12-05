@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Inventory</title>
+</head>
+<body>
+  <h1>Inventory Items</h1>
+  <ul>
+    <% items.forEach(item => { %>
+      <li><%= item.name %> - $<%= item.price %> - Stock: <%= item.stock %></li>
+    <% }) %>
+  </ul>
+</body>
+</html>
