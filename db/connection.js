@@ -1,36 +1,15 @@
-// src/db/connection.js - PostgreSQL version
-const { Pool } = require("pg");
+// src/db/connection.js - Database mock for Week 5
+console.log("⚠️ Database mock active. No real database connection required.");
 
-// Validate environment variables
-const requiredEnv = ["DB_HOST", "DB_USER", "DB_PASS", "DB_NAME", "DB_PORT"];
-requiredEnv.forEach((key) => {
-  if (!process.env[key]) {
-    console.error(`❌ Missing required environment variable: ${key}`);
-    process.exit(1);
-  }
-});
-
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  max: 15,           // connection limit
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
-
-// Test connection
-(async () => {
-  try {
-    const client = await pool.connect();
-    console.log("✅ PostgreSQL DB connected successfully");
-    client.release();
-  } catch (err) {
-    console.error("❌ PostgreSQL DB connection FAILED:", err.message);
-    process.exit(1);
-  }
-})();
+// Minimal mock pool to satisfy your models
+const pool = {
+  execute: async (query, params) => {
+    console.log("DB query executed (mock):", query, params);
+    return [[], []]; // empty rows and metadata
+  },
+  getConnection: async () => ({
+    release: () => console.log("DB connection released (mock)"),
+  }),
+};
 
 module.exports = pool;
