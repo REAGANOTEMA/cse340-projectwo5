@@ -1,37 +1,35 @@
-const mysql = require("mysql2/promise");
+// src/db/connection.js - PostgreSQL version
+const { Pool } = require("pg");
 
-// Validate required environment variables (prevents silent crashes)
-const requiredEnv = ["DB_HOST", "DB_USER", "DB_PASS", "DB_NAME"];
+// Validate environment variables
+const requiredEnv = ["DB_HOST", "DB_USER", "DB_PASS", "DB_NAME", "DB_PORT"];
 requiredEnv.forEach((key) => {
   if (!process.env[key]) {
     console.error(`❌ Missing required environment variable: ${key}`);
-    process.exit(1); // Stops deployment with clear error
+    process.exit(1);
   }
 });
 
-// Create MySQL connection pool with optimized production settings
-const pool = mysql.createPool({
+const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 15,       // slightly increased for Render performance
-  queueLimit: 0,
-  enableKeepAlive: true,     // helps prevent Render idle disconnect
-  keepAliveInitialDelay: 0,
+  port: process.env.DB_PORT,
+  max: 15,           // connection limit
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
-// Test connection on startup for safer deployments
+// Test connection
 (async () => {
   try {
-    const conn = await pool.getConnection();
-    console.log("✅ Database connection established successfully.");
-    conn.release();
+    const client = await pool.connect();
+    console.log("✅ PostgreSQL DB connected successfully");
+    client.release();
   } catch (err) {
-    console.error("❌ Database connection FAILED:");
-    console.error(err.message);
-    process.exit(1); // Prevent running a broken app on Render
+    console.error("❌ PostgreSQL DB connection FAILED:", err.message);
+    process.exit(1);
   }
 })();
 
