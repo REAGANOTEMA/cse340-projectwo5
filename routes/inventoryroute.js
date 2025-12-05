@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const inventorymodel = require('../models/inventorymodel');
+const inventorymodel = require('../models/inventorymodel'); // correct
 const { requireadmin } = require('../middleware/authmiddleware');
 
 router.get('/manage', requireadmin, async (req, res) => {
@@ -15,7 +15,8 @@ router.get('/manage', requireadmin, async (req, res) => {
 
 router.post('/add', requireadmin, async (req, res) => {
   const { name, price, stock } = req.body;
-  if (!name || price == null || stock == null) return res.status(400).send('Missing fields');
+  if (!name || price == null || stock == null)
+    return res.status(400).send('Missing fields');
 
   try {
     const id = await inventorymodel.addInventory({ name, price, stock });
@@ -28,10 +29,16 @@ router.post('/add', requireadmin, async (req, res) => {
 
 router.post('/update', requireadmin, async (req, res) => {
   const { id, name, price, stock } = req.body;
-  if (!id || !name || price == null || stock == null) return res.status(400).send('Missing fields');
+  if (!id || !name || price == null || stock == null)
+    return res.status(400).send('Missing fields');
 
   try {
-    const rows = await inventorymodel.updateInventory({ id, name, price, stock });
+    const rows = await inventorymodel.updateInventory({
+      id,
+      name,
+      price,
+      stock,
+    });
     res.send(`${rows} item(s) updated`);
   } catch (err) {
     console.error(err);
