@@ -1,19 +1,15 @@
-const jwt = require('jsonwebtoken');
+// src/middleware/authmiddleware.js
+// Mock authentication middleware for Week 5
 
 function requireauth(req, res, next) {
-  const token = req.cookies?.jwt;
-  if (!token) return res.redirect('/login');
-
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch {
-    res.status(401).send('Invalid token');
-  }
+  // Mock user for development/deployment
+  req.user = { account_id: 1, role: 'user' };
+  next();
 }
 
 function requireadmin(req, res, next) {
-  if (!req.user || req.user.role !== 'admin') return res.status(403).send('Admin only');
+  // Mock admin user for routes that require admin
+  req.user = { account_id: 1, role: 'admin' };
   next();
 }
 
