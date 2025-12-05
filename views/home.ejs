@@ -1,16 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Home</title>
+  <meta charset="UTF-8">
+  <title>Home | Reagan Otema</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f2f4f7;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #007bff;
+    }
+
+    a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #555;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome <%= user ? user.firstname : 'Guest' %></h1>
-  <% if (user) { %>
-    <p><a href="/account">Manage Account</a></p>
-    <p><a href="/inventory/manage">Inventory</a></p>
-    <p><a href="/logout">Logout</a></p>
-  <% } else { %>
-    <p><a href="/login">Login</a></p>
-  <% } %>
+
+  <header>
+    Reagan Otema Dashboard
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Welcome, <%= user.firstname %> <%= user.lastname %></h2>
+      <p><strong>Email:</strong> <%= user.email %></p>
+      <p><strong>Role:</strong> <%= user.role %></p>
+      <p>
+        <a href="/account">Manage Account</a> | 
+        <a href="/logout">Logout</a>
+      </p>
+    </div>
+
+    <% if (user.account_type === 'Admin' || user.role === 'admin') { %>
+    <div class="card">
+      <h2>Inventory Management</h2>
+      <p>
+        <a href="/inventory/manage">Manage Inventory</a>
+      </p>
+    </div>
+    <% } %>
+
+  </div>
+
+  <div class="footer">
+    &copy; 2025 Reagan Otema. All rights reserved.
+  </div>
+
 </body>
 </html>
