@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const accountmodel = require('../models/accountmodel'); // FIXED
+const accountmodel = require('../models/accountmodel');
 const { requireauth } = require('../middleware/authmiddleware');
 
 router.get('/', requireauth, async (req, res) => {
@@ -17,12 +17,7 @@ router.get('/', requireauth, async (req, res) => {
 router.post('/update', requireauth, async (req, res) => {
   try {
     const { firstname, lastname, email } = req.body;
-    await accountmodel.updateAccountInfo(
-      req.user.account_id,
-      firstname,
-      lastname,
-      email
-    );
+    await accountmodel.updateAccountInfo(req.user.account_id, firstname, lastname, email);
     res.send('Account info updated!');
   } catch (err) {
     console.error(err);

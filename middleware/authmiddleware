@@ -1,15 +1,13 @@
-// src/middleware/authmiddleware.js
 // Mock authentication middleware for Week 5
-
 function requireauth(req, res, next) {
-  // Mock user for development/deployment
-  req.user = { account_id: 1, role: 'user' };
+  // Mock logged-in user
+  req.user = { account_id: 1, role: 'user', firstname: 'John', lastname: 'Doe', email: 'john@example.com' };
   next();
 }
 
 function requireadmin(req, res, next) {
-  // Mock admin user for routes that require admin
-  req.user = { account_id: 1, role: 'admin' };
+  // Mock admin user
+  req.user = { account_id: 1, role: 'admin', firstname: 'Admin', lastname: 'User', email: 'admin@example.com' };
   next();
 }
 

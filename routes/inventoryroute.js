@@ -1,59 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const inventorymodel = require('../models/inventorymodel'); // correct
 const { requireadmin } = require('../middleware/authmiddleware');
 
-router.get('/manage', requireadmin, async (req, res) => {
-  try {
-    const items = await inventorymodel.getAllInventory();
-    res.render('inventory/manage', { items });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error fetching inventory');
-  }
+// Mock inventory
+let inventory = [
+  { id: 1, name: 'Item A', price: 10, stock: 5 },
+  { id: 2, name: 'Item B', price: 20, stock: 3 },
+];
+
+router.get('/manage', requireadmin, (req, res) => {
+  res.render('inventory/manage', { items: inventory });
 });
 
-router.post('/add', requireadmin, async (req, res) => {
+router.post('/add', requireadmin, (req, res) => {
   const { name, price, stock } = req.body;
-  if (!name || price == null || stock == null)
-    return res.status(400).send('Missing fields');
-
-  try {
-    const id = await inventorymodel.addInventory({ name, price, stock });
-    res.send(`Item added with ID: ${id}`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error adding item');
-  }
+  const id = inventory.length + 1;
+  inventory.push({ id, name, price, stock });
+  res.send(`Item added with ID: ${id}`);
 });
 
-router.post('/update', requireadmin, async (req, res) => {
+router.post('/update', requireadmin, (req, res) => {
   const { id, name, price, stock } = req.body;
-  if (!id || !name || price == null || stock == null)
-    return res.status(400).send('Missing fields');
-
-  try {
-    const rows = await inventorymodel.updateInventory({
-      id,
-      name,
-      price,
-      stock,
-    });
-    res.send(`${rows} item(s) updated`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error updating item');
-  }
+  const item = inventory.find(i => i.id == id);
+  if (item) {
+    item.name = name;
+    item.price = price;
+    item.stock = stock;
+    res.send(`${id} updated`);
+  } else res.status(404).send('Item not found');
 });
 
-router.get('/delete/:id', requireadmin, async (req, res) => {
-  try {
-    const rows = await inventorymodel.deleteInventory(req.params.id);
-    res.send(`${rows} item(s) deleted`);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error deleting item');
-  }
+router.get('/delete/:id', requireadmin, (req, res) => {
+  const id = parseInt(req.params.id);
+  inventory = inventory.filter(i => i.id !== id);
+  res.send(`${id} deleted`);
 });
 
 module.exports = router;
