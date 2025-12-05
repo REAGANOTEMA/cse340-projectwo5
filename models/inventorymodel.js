@@ -1,27 +1,26 @@
 const pool = require('../db/connection');
 
 async function getAllInventory() {
-  const sql = 'SELECT * FROM inventory';
-  const [rows] = await pool.execute(sql);
-  return rows;
+  console.log("Fetching all inventory (mock)");
+  return [
+    { id: 1, name: "Item 1", price: 10, stock: 100 },
+    { id: 2, name: "Item 2", price: 20, stock: 50 }
+  ];
 }
 
 async function addInventory(item) {
-  const sql = 'INSERT INTO inventory (name, price, stock) VALUES (?, ?, ?)';
-  const [result] = await pool.execute(sql, [item.name, item.price, item.stock]);
-  return result.insertId;
+  console.log("Adding inventory (mock):", item);
+  return 1; // mock inserted ID
 }
 
 async function updateInventory(item) {
-  const sql = 'UPDATE inventory SET name = ?, price = ?, stock = ? WHERE id = ?';
-  const [result] = await pool.execute(sql, [item.name, item.price, item.stock, item.id]);
-  return result.affectedRows;
+  console.log("Updating inventory (mock):", item);
+  return 1; // mock affected rows
 }
 
 async function deleteInventory(id) {
-  const sql = 'DELETE FROM inventory WHERE id = ?';
-  const [result] = await pool.execute(sql, [id]);
-  return result.affectedRows;
+  console.log("Deleting inventory (mock) ID:", id);
+  return 1; // mock affected rows
 }
 
 module.exports = { getAllInventory, addInventory, updateInventory, deleteInventory };
